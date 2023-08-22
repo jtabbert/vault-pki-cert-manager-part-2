@@ -52,8 +52,32 @@ Apply the ingress
 ```shell-session
 $ kubectl apply -f ingress.yaml
 ```
+Now we need to get the ingress IP address to update our hosts file
 
-Use curl to inspect the certificate.  Note the CN=Kubernetes Ingress Controller Fake Certificate
+```shell-session
+$ kubectl get ingress
+```
+
+Output
+
+```shell-session
+NAME         CLASS   HOSTS              ADDRESS          PORTS     AGE
+nginx-demo   nginx   demo.example.com   192.168.59.100   80, 443   15m
+```
+
+Update our hosts file to point example.com to the address in the output of the command above
+
+```shell-session
+$ sudo nano /etc/hosts
+```
+
+At the bottom of the file add
+
+```shell-session
+$ 192.168.59.100 demo.example.com
+```
+
+Now use curl to inspect the certificate.  Note the CN=Kubernetes Ingress Controller Fake Certificate.  This is a default certificate, we will replace this in the following steps.
 
 ```shell-session
 $ curl --insecure -vvI https://demo.example.com 2>&1 | awk 'BEGIN { cert=0 } /^\* SSL connection/ { cert=1 } /^\*/ { if (cert) print }'
