@@ -1,5 +1,7 @@
 # vault-pki-cert-manager-part-2
 
+The purpose of this tutorial is to build on what we had accomplished in the last exercise.  Here we will generate a TLS certificate and apply this to the ngnix sample hello-world application
+
 
 First we will enable ingress on Minikube
 
