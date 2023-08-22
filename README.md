@@ -24,14 +24,29 @@ $ kubectl expose deployment nginx-demo --port=80
 ```
 
 
-
-
-Next, retrieve the web application and additional configuration by cloning the
-[hashicorp/vault-guides](https://github.com/hashicorp/vault-guides) repository
-from GitHub.
-
 ```shell-session
-$ git clone https://github.com/hashicorp/vault-guides.git
+$ apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: nginx-demo
+  annotations:
+    cert-manager.io/issuer: "vault-issuer"
+spec:
+  tls:
+  - hosts:
+    - demo.example.com
+    secretName: nginx-demo
+  rules:
+    - host: demo.example.com
+      http:
+        paths:
+          - pathType: Prefix
+            path: "/"
+            backend:
+             service:
+               name: nginx-demo
+               port:
+                 number: 80 
 ```
 
 This repository contains supporting content for all of the Vault learn guides.
