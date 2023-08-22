@@ -24,7 +24,7 @@ Expose the deployment
 $ kubectl expose deployment nginx-demo --port=80
 ```
 
-Apply the Ingress to allow traffic into our application.  Take note of the "cert-manager.io/issuer" annotation.
+Apply the Ingress to allow traffic into our application
 
 ```shell-session
 $ cat > ingress.yaml <<EOF 
@@ -32,13 +32,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: nginx-demo
-  annotations:
-    cert-manager.io/issuer: "vault-issuer"
 spec:
-  tls:
-  - hosts:
-    - demo.example.com
-    secretName: nginx-demo
   rules:
     - host: demo.example.com
       http:
@@ -58,6 +52,14 @@ Apply the ingress
 ```shell-session
 $ kubectl apply -f ingress.yaml
 ```
+
+Use curl to inspect the certificate.  Note the CN=Kubernetes Ingress Controller Fake Certificate
+
+```shell-session
+$ curl --insecure -vvI https://demo.example.com 2>&1 | awk 'BEGIN { cert=0 } /^\* SSL connection/ { cert=1 } /^\*/ { if (cert) print }'
+```
+
+
 
 ## Next steps
 
