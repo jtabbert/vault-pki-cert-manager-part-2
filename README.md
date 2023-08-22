@@ -86,40 +86,29 @@ VirtualBox or similar.
 Next, install [kubectl CLI](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
 and [helm CLI](https://github.com/helm/helm#install).
 
-<Tabs>
-<Tab heading="Homebrew on OS X">
-
-
-Install `kubectl` with [Homebrew](https://brew.sh).
+First we will enable ingress on Minikube
 
 ```shell-session
-$ brew install kubernetes-cli
+$ minikube addons enable ingress
 ```
 
-Install `helm` with Homebrew.
+We will create a deplyoment called ngnix-demo
 
 ```shell-session
-$ brew install helm
+$ kubectl create deployment nginx-demo --image=nginxdemos/hello
 ```
 
-</Tab>
-<Tab heading="Chocolatey on Windows">
-
-
-Install `kubectl` with [Chocolatey](https://chocolatey.org/).
+Verify the deployment is ready
 
 ```shell-session
-$ choco install kubernetes-cli
+$ kubectl get deployment
 ```
-
-Install `helm` with Chocolatey.
 
 ```shell-session
-$ choco install kubernetes-helm
+$ kubectl expose deployment nginx-demo --port=80
 ```
 
-</Tab>
-</Tabs>
+
 
 
 Next, retrieve the web application and additional configuration by cloning the
