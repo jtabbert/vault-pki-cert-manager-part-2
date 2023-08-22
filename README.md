@@ -83,18 +83,38 @@ Now use curl to inspect the certificate.  Note the CN=Kubernetes Ingress Control
 $ curl --insecure -vvI https://demo.example.com 2>&1 | awk 'BEGIN { cert=0 } /^\* SSL connection/ { cert=1 } /^\*/ { if (cert) print }'
 ```
 
-Now we will apply the Ingress patch to use HashiCorp Vault & the "cert-manager.io/issuer" 
+
+```shell-session
+$ cat > demo-example-com-tls.yaml <<EOF
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: demo-example-com
+  namespace: default
+spec:
+  secretName: demo-example-com-tls
+  issuerRef:
+    name: vault-issuer
+  commonName: demo.example.com
+  dnsNames:
+  - demo.example.com
+EOF
+```
+
+```shell-session
+$ kubectl apply -f demo-example-com-tls.yaml
+```
+
+
+Now we will apply the Ingress patch to use TLS and the HashiCorp Vault Generated Certificate
 
 ```shell-session
 $ cat > ingress-patch.yaml <<EOF
-metadata:
-  annotations:
-    cert-manager.io/issuer: "vault-issuer"
 spec:
   tls:
   - hosts:
     - demo.example.com
-    secretName: nginx-demo
+    secretName: demo-example-com-tls
 EOF
 ```
 
