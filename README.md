@@ -85,6 +85,20 @@ Now use curl to inspect the certificate.  Note the CN=Kubernetes Ingress Control
 $ curl --insecure -vvI https://demo.example.com 2>&1 | awk 'BEGIN { cert=0 } /^\* SSL connection/ { cert=1 } /^\*/ { if (cert) print }'
 ```
 
+The Output should look somthing like this
+
+```shell-session
+* SSL connection using TLSv1.3 / TLS_AES_256_GCM_SHA384
+* ALPN, server accepted to use h2
+* Server certificate:
+*  subject: O=Acme Co; CN=Kubernetes Ingress Controller Fake Certificate
+*  start date: Aug 22 15:37:42 2023 GMT
+*  expire date: Aug 21 15:37:42 2024 GMT
+*  issuer: O=Acme Co; CN=Kubernetes Ingress Controller Fake Certificate
+
+```
+
+Now we will generate a certificate for "demo.example.com" and store this as a K8s secret called "demo-example-com-tls"
 
 ```shell-session
 $ cat > demo-example-com-tls.yaml <<EOF
@@ -103,10 +117,11 @@ spec:
 EOF
 ```
 
+Apply the file to make the changes
+
 ```shell-session
 $ kubectl apply -f demo-example-com-tls.yaml
 ```
-
 
 Now we will apply the Ingress patch to use TLS and the HashiCorp Vault Generated Certificate
 
@@ -131,6 +146,20 @@ We can run the curl command again to see CN=example.com
 ```shell-session
 $ curl --insecure -vvI https://demo.example.com 2>&1 | awk 'BEGIN { cert=0 } /^\* SSL connection/ { cert=1 } /^\*/ { if (cert) print }'
 ```
+
+Output
+
+```shell-session
+* SSL connection using TLSv1.3 / TLS_AES_256_GCM_SHA384
+* ALPN, server accepted to use h2
+* Server certificate:
+*  subject: CN=demo.example.com
+*  start date: Aug 22 19:28:47 2023 GMT
+*  expire date: Aug 25 19:29:17 2023 GMT
+*  issuer: CN=example.com
+```
+
+We can see now we are now using the Vault issued certificate
 
 ## Next steps
 
