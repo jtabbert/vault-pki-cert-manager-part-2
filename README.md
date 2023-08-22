@@ -61,9 +61,9 @@ $ kubectl apply -f ingress.yaml
 
 ## Next steps
 
-In this tutorial, you installed Vault configured the PKI secrets engine and
-Kubernetes authentication. Then installed Jetstack's cert-manager, configured it
-to use Vault, and requested a certificate.
+In this tutorial, we built on our previous work. We leveraged Jetstack's cert-manager to automatically
+Request a certificate from Vault. This provided us with a real world example of how to use Jetstack's cert-manager
+along with HashiCorp Vault to automate the certificate lifecycle.
 
 Besides creation, these certificates can be revoked and removed. Learn more about
 [Jetstack's cert-manager](https://cert-manager.io/) used in this tutorial and
