@@ -24,6 +24,7 @@ Expose the deployment
 $ kubectl expose deployment nginx-demo --port=80
 ```
 
+Apply the Ingress to allow traffic into our application.  Take note of the "cert-manager.io/issuer" annotation.
 
 ```shell-session
 $ cat > ingress.yaml <<EOF 
@@ -51,6 +52,8 @@ spec:
                  number: 80
 EOF 
 ```
+
+Apply the ingress
 
 ```shell-session
 $ kubectl apply -f ingress.yaml
