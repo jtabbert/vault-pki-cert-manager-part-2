@@ -6,30 +6,30 @@ The purpose of this tutorial is to build on what we had accomplished in the last
 First we will enable ingress on Minikube
 
 ```shell-session
-$ minikube addons enable ingress
+minikube addons enable ingress
 ```
 
 We will create a deplyoment called ngnix-demo
 
 ```shell-session
-$ kubectl create deployment nginx-demo --image=nginxdemos/hello
+kubectl create deployment nginx-demo --image=nginxdemos/hello
 ```
 
 Verify the deployment is ready
 
 ```shell-session
-$ kubectl get deployment
+kubectl get deployment
 ```
 Expose the deployment
 
 ```shell-session
-$ kubectl expose deployment nginx-demo --port=80
+kubectl expose deployment nginx-demo --port=80
 ```
 
 Apply the Ingress to allow traffic into our application
 
 ```shell-session
-$ cat > ingress.yaml <<EOF 
+cat > ingress.yaml <<EOF 
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -52,12 +52,12 @@ EOF
 Apply the ingress
 
 ```shell-session
-$ kubectl apply -f ingress.yaml
+kubectl apply -f ingress.yaml
 ```
 Now we need to get the ingress IP address to update our hosts file
 
 ```shell-session
-$ kubectl get ingress
+kubectl get ingress
 ```
 
 Output
@@ -70,19 +70,19 @@ nginx-demo   nginx   demo.example.com   192.168.59.100   80, 443   15m
 Update our hosts file to point example.com to the address in the output of the command above
 
 ```shell-session
-$ sudo nano /etc/hosts
+sudo nano /etc/hosts
 ```
 
 At the bottom of the file add
 
 ```shell-session
-$ 192.168.59.100 demo.example.com
+192.168.59.100 demo.example.com
 ```
 
 Now use curl to inspect the certificate.  Note the CN=Kubernetes Ingress Controller Fake Certificate.  This is a default certificate, we will replace this in the following steps.
 
 ```shell-session
-$ curl --insecure -vvI https://demo.example.com 2>&1 | awk 'BEGIN { cert=0 } /^\* SSL connection/ { cert=1 } /^\*/ { if (cert) print }'
+curl --insecure -vvI https://demo.example.com 2>&1 | awk 'BEGIN { cert=0 } /^\* SSL connection/ { cert=1 } /^\*/ { if (cert) print }'
 ```
 
 The Output should look somthing like this
@@ -101,7 +101,7 @@ The Output should look somthing like this
 Now we will generate a certificate for "demo.example.com" and store this as a K8s secret called "demo-example-com-tls"
 
 ```shell-session
-$ cat > demo-example-com-tls.yaml <<EOF
+cat > demo-example-com-tls.yaml <<EOF
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
@@ -120,13 +120,13 @@ EOF
 Apply the file to make the changes
 
 ```shell-session
-$ kubectl apply -f demo-example-com-tls.yaml
+kubectl apply -f demo-example-com-tls.yaml
 ```
 
 Now we will apply the Ingress patch to use TLS and the HashiCorp Vault Generated Certificate
 
 ```shell-session
-$ cat > ingress-patch.yaml <<EOF
+cat > ingress-patch.yaml <<EOF
 spec:
   tls:
   - hosts:
@@ -138,13 +138,13 @@ EOF
 We will apply the patch to the nginx-demo ingress controller
 
 ```shell-session
-$ kubectl patch ingress nginx-demo --patch-file=ingress-patch.yaml
+kubectl patch ingress nginx-demo --patch-file=ingress-patch.yaml
 ```
 
 We can run the curl command again to see CN=example.com
 
 ```shell-session
-$ curl --insecure -vvI https://demo.example.com 2>&1 | awk 'BEGIN { cert=0 } /^\* SSL connection/ { cert=1 } /^\*/ { if (cert) print }'
+curl --insecure -vvI https://demo.example.com 2>&1 | awk 'BEGIN { cert=0 } /^\* SSL connection/ { cert=1 } /^\*/ { if (cert) print }'
 ```
 
 Output
