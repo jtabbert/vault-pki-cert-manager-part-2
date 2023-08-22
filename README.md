@@ -105,7 +105,7 @@ cat > demo-example-com-tls.yaml <<EOF
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: demo-example-com
+  name: demo-example-com-tls
   namespace: default
 spec:
   secretName: demo-example-com-tls
