@@ -74,6 +74,18 @@ spec:
 EOF
 ```
 
+We will apply the patch to the nginx-demo ingress controller
+
+```shell-session
+$ kubectl patch ingress nginx-demo --patch-file=ingress-patch.yaml
+```
+
+We can run the curl command again to see CN=example.com
+
+```shell-session
+$ curl --insecure -vvI https://demo.example.com 2>&1 | awk 'BEGIN { cert=0 } /^\* SSL connection/ { cert=1 } /^\*/ { if (cert) print }'
+```
+
 ## Next steps
 
 In this tutorial, we built on our previous work. We leveraged Jetstack's cert-manager to automatically
