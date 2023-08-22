@@ -25,7 +25,8 @@ $ kubectl expose deployment nginx-demo --port=80
 
 
 ```shell-session
-$ apiVersion: networking.k8s.io/v1
+$ cat > ingress.yaml <<EOF 
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: nginx-demo
@@ -46,35 +47,9 @@ spec:
              service:
                name: nginx-demo
                port:
-                 number: 80 
+                 number: 80
+EOF 
 ```
-
-This repository contains supporting content for all of the Vault learn guides.
-The content specific to this tutorial can be found within a sub-directory.
-
-Go into the
-`vault-guides/operations/provision-vault/kubernetes/minikube/external-vault`
-directory.
-
-```shell-session
-$ cd vault-guides/operations/provision-vault/kubernetes/minikube/external-vault
-```
-
-<Note title="Working directory">
-
- This tutorial assumes that the remainder of commands are
-executed within this directory.
-
-</Note>
-
-## Start Minikube
-
-[Minikube](https://minikube.sigs.k8s.io/) is a CLI tool that provisions and
-manages the lifecycle of single-node [Kubernetes
-clusters](https://kubernetes.io/docs/concepts/#kubernetes-control-plane). These
-clusters are run locally inside Virtual Machines (VM).
-
-Start a Kubernetes cluster.
 
 ```shell-session
 $ minikube start
