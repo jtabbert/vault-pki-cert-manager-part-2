@@ -18,6 +18,7 @@ Verify the deployment is ready
 ```shell-session
 $ kubectl get deployment
 ```
+Expose the deployment
 
 ```shell-session
 $ kubectl expose deployment nginx-demo --port=80
