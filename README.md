@@ -59,7 +59,7 @@ Use curl to inspect the certificate.  Note the CN=Kubernetes Ingress Controller 
 $ curl --insecure -vvI https://demo.example.com 2>&1 | awk 'BEGIN { cert=0 } /^\* SSL connection/ { cert=1 } /^\*/ { if (cert) print }'
 ```
 
-Now we will apply the Ingress patch to use the cert-manager.io issuer & enable TLS
+Now we will apply the Ingress patch to use HashiCorp Vault & the "cert-manager.io/issuer" 
 
 ```shell-session
 $ cat > ingress-patch.yaml <<EOF
