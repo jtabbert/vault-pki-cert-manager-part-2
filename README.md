@@ -4,10 +4,11 @@ The purpose of this tutorial is to build on what we had accomplished in the last
 
 These are the software versions used in this tutorial
 
+```shell-session
 Minikube Version: v1.31.2
 Ubuntu Version 22.04 LTS
 Helm Version: v3.12.3
-
+```
 
 First we will enable ingress on Minikube
 
