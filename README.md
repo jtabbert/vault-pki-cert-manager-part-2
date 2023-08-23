@@ -80,7 +80,7 @@ Update our hosts file to point example.com to the address in the output of the c
 sudo nano /etc/hosts
 ```
 
-At the bottom of the file add
+At the bottom of the file add, replacing the IP address below with the output of the command "kubectl get ingress" 
 
 ```shell-session
 192.168.59.100 demo.example.com
