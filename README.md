@@ -53,7 +53,7 @@ spec:
                name: nginx-demo
                port:
                  number: 80
-EOF 
+EOF
 ```
 
 Apply the ingress
