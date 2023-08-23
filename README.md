@@ -71,7 +71,7 @@ Output
 
 ```shell-session
 NAME         CLASS   HOSTS              ADDRESS          PORTS     AGE
-nginx-demo   nginx   demo.example.com   **192.168.59.100**   80, 443   15m
+nginx-demo   nginx   demo.example.com   192.168.59.100   80, 443   15m
 ```
 
 Update our hosts file to point example.com to the address in the output of the command above
