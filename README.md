@@ -168,6 +168,23 @@ Output
 
 We can see now we are now using the Vault issued certificate.  We can also view this via a web browser.
 
+**To View the Vault UI**
+
+Grab the Root token
+
+```shell-session
+cat init-keys.json | jq -r ".root_token"
+```
+
+Setup port forwarding
+
+```shell-session
+kubectl port-forward svc/vault 8200:8200
+```
+The Vault UI will now be available on http://127.0.0.1:8200
+
+You can take a look at the PKI secrets engine configuration
+
 ## Next steps
 
 In this tutorial, we built on our previous work. We leveraged Jetstack's cert-manager to automatically
